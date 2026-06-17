@@ -23,12 +23,15 @@ Only one preset should be active at a time. If both are checked, Full Game takes
 
 ## Full Game Mode
 The timer starts when you first gain control of the player, and splits once per chapter as each new chapter begins. Time between chapters — loading screens, cutscenes, and transition sequences — is automatically paused and not counted.
-
+**NOTE: YOU WILL NEED TO MAKE SURE THE LOADING SYMBOL IS VISIBLE FOR THE TIMER TO BE PAUSED. There are certain cutscenes where the loading symbol only shows up when trying to skip. You should be spamming skip to remove that load time.
+**
 **Split layout:** one split per chapter, 17 splits total (Against The Odds through For England).
 (You will have to manually put in the right number of checkpoints. This is a scripting limitation.)
 
 ## IL Mode
 The timer splits on every checkpoint transition within a level. Use this for individual chapter runs or practice.
+****NOTE: YOU WILL NEED TO MAKE SURE THE LOADING SYMBOL IS VISIBLE FOR THE TIMER TO BE PAUSED. There are certain cutscenes where the loading symbol only shows up when trying to skip. You should be spamming skip to remove that load time.
+****
 
 **To run a single chapter:**
 1. Load into the chapter from the chapter select menu.
