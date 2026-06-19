@@ -738,7 +738,8 @@ split
 
         if (ilMode && cpType != vars.IL_CHAPTER_TRANSITION)
         {
-            bool result = cpType == vars.IL_MIDDLE || cpType == vars.IL_START;
+            bool result = (cpType == vars.IL_MIDDLE || cpType == vars.IL_START || cpType == vars.IL_END)
+                    && vars.cpVisibility[current.levelID] == vars.CHECKPOINT_VISIBLE;
             if (result) { vars.pauseTimer = false; vars.waitingToStart = false; vars.pausedAtLevel = 0; }
             return result;
         }
