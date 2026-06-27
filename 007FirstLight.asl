@@ -1,9 +1,9 @@
-// 007 First Light - Auto Splitter 1.0.6.0
-// Created by Joats aka saJoats - 06/27/2026
+// 007 First Light - Auto Splitter 2.0.1
+// Created by Joats aka saJoats - 06/15/2026
 // Leave a comment at https://joats.neocities.org/home
 
 
-state("007FirstLight", "1.0.4.0")
+state("007FirstLight", "1.0.0.0")
 {
     int    gameState            : 0x3DD29DC;
     double levelID              : 0x6077D80;
@@ -34,6 +34,26 @@ state("007FirstLight", "1.0.6.0")
     double cutsceneFlag         : 0x3A08DCC; //0000001D00000001  or 6.1537877938487E-313
     int    blackscreenLoadFlag  : 0x343D260; // 0 or 1
     int    blackbarFlag         : 0x5DDAF7C; //0 when off, 1 when on
+}
+
+init
+{
+    version = modules.First().FileVersionInfo.FileVersion;
+    vars.startRun           = true;
+    vars.waitingToStart     = false;
+    vars.waitingToResume    = false;
+    vars.waitingToSplit     = false;
+    vars.pendingDelayMs     = 0;
+    vars.delayStartTime     = 0;
+    vars.delayMsTarget      = -1;
+    vars.delayMsElapsed     = 0;
+    vars.cutsceneEnterCount = 0;
+    vars.cutsceneExitCount  = 0;
+    vars.blackbarEnterCount = 0;
+    vars.blackbarExitCount  = 0;
+    vars.pauseTimer         = false;
+    vars.pausedAtLevel      = 0.0;
+    vars.ilMode             = false;
 }
 
 startup
@@ -370,25 +390,6 @@ startup
 
     settings.Add("presetIL", false, "IL - Individual Level Mode (split every checkpoint)");
     settings.SetToolTip("presetIL", "Splits on every checkpoint transition.");
-}
-
-init
-{
-    vars.startRun           = true;
-    vars.waitingToStart     = false;
-    vars.waitingToResume    = false;
-    vars.waitingToSplit     = false;
-    vars.pendingDelayMs     = 0;
-    vars.delayStartTime     = 0;
-    vars.delayMsTarget      = -1;
-    vars.delayMsElapsed     = 0;
-    vars.cutsceneEnterCount = 0;
-    vars.cutsceneExitCount  = 0;
-    vars.blackbarEnterCount = 0;
-    vars.blackbarExitCount  = 0;
-    vars.pauseTimer         = false;
-    vars.pausedAtLevel      = 0.0;
-    vars.ilMode             = false;
 }
 
 update
