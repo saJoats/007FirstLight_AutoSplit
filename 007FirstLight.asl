@@ -5,13 +5,13 @@
 
 state("007FirstLight", "1.0.0.0")
 {
-    int    gameState            : 0x3DD29DC;
-    double levelID              : 0x6077D80;
-    double cutsceneFlag         : 0x3A07FCC;
-    int    blackscreenLoadFlag  : 0x343C1A0;
-    int    blackbarFlag         : 0x5AB807C;
+    int    gameState            : 0x3DD645C;
+    double levelID              : 0x607AA80;
+    double cutsceneFlag         : 0x3A0BA4C;
+    int    blackscreenLoadFlag  : 0x591F999;
+    int    blackbarFlag         : 0x5ABFF7C;
 }
-state("007FirstLight", "1.0.4.0")
+state("007FirstLight", "1.0.3.0")
 {
     int    gameState            : 0x3DD29DC;
     double levelID              : 0x6077D80;
