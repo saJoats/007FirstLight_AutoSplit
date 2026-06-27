@@ -1,20 +1,41 @@
-// 007 First Light - Auto Splitter 2.0.1
-// Created by Joats aka saJoats - 06/15/2026
+// 007 First Light - Auto Splitter 1.0.6.0
+// Created by Joats aka saJoats - 06/27/2026
 // Leave a comment at https://joats.neocities.org/home
 
-state("007FirstLight")
+
+state("007FirstLight", "1.0.4.0")
 {
-    // 1.0.4 int    gameState           : 0x3DD29DC; // changes to 4 when mid loading symbol shows on screen
-    int    gameState            : 0x3DD3D9C;
-    //1.0.4 double levelID             : 0x6077D80;
-    double levelID              : 0x63992C0;
-    //1.0.4 double cutsceneFlag        : 0x3A07FCC;
-    double cutsceneFlag         : 0x3A092CC;
-    //1.0,4 1int    blackscreenLoadFlag : 0x343C1A0;
-    int     blackscreenLoadFlag : 0x62F3794;
-    //1.0.4 int    blackbarFlag        : 0x5AB807C;
-    int     blackbarFlag        : 0x5DDB4E8;
+    int    gameState            : 0x3DD29DC;
+    double levelID              : 0x6077D80;
+    double cutsceneFlag         : 0x3A07FCC;
+    int    blackscreenLoadFlag  : 0x343C1A0;
+    int    blackbarFlag         : 0x5AB807C;
 }
+state("007FirstLight", "1.0.4.0")
+{
+    int    gameState            : 0x3DD29DC;
+    double levelID              : 0x6077D80;
+    double cutsceneFlag         : 0x3A07FCC;
+    int    blackscreenLoadFlag  : 0x343C1A0;
+    int    blackbarFlag         : 0x5AB807C;
+}
+state("007FirstLight", "1.0.5.0")
+{
+    int    gameState            : 0x3DD3D9C;
+    double levelID              : 0x63992C0;
+    double cutsceneFlag         : 0x3A092CC;
+    int    blackscreenLoadFlag  : 0x62F3794;
+    int    blackbarFlag         : 0x5DDB4E8;
+}
+state("007FirstLight", "1.0.6.0")
+{
+    int    gameState            : 0x3DD3B1C; //4=loading 6=ingame 
+    double levelID              : 0x6398E00;  
+    double cutsceneFlag         : 0x3A08DCC; //0000001D00000001  or 6.1537877938487E-313
+    int    blackscreenLoadFlag  : 0x343D260; // 0 or 1
+    int    blackbarFlag         : 0x5DDAF7C; //0 when off, 1 when on
+}
+
 startup
 {
     refreshRate = 60;
@@ -268,7 +289,7 @@ startup
     R(0x091DF821D5415242UL, 14, vars.IL_MIDDLE,             vars.CHECKPOINT_VISIBLE,  vars.NONE, 0, 0, vars.NONE, 0, 0, "Bigger Is Better");
     R(0x32F41E9D66FA7D6EUL, 14, vars.IL_MIDDLE,             vars.CHECKPOINT_VISIBLE,  vars.NONE, 0, 0, vars.NONE, 0, 0, "Track Down Damien");
     R(0x6ADFEBC1E25BFE74UL, 14, vars.IL_MIDDLE,             vars.CHECKPOINT_VISIBLE,  vars.NONE, 0, 0, vars.NONE, 0, 0, "Keep Damien At Bay");
-    R(0xEB22780B41541D11UL, 14, vars.IL_END,                vars.CHECKPOINT_VISIBLE,  vars.NONE, 0, 0, vars.CUTSCENE_START, 4, 0, "Use The Environment Against Damien");
+    R(0xEB22780B41541D11UL, 14, vars.IL_END,                vars.CHECKPOINT_VISIBLE,  vars.NONE, 0, 0, vars.BLACKBAR_START, 2, 0, "Use The Environment Against Damien");
     R(0x731714DF850E243FUL, 14, vars.IL_CHAPTER_TRANSITION, vars.CHECKPOINT_VISIBLE,  vars.NONE, 0, 0, vars.NONE, 0, 0, "Sunrise In Vietnam");
 
     // ── Man Of The Hour ───────────────────────────────────────────────────────
@@ -627,27 +648,33 @@ split
         return false;
     }
 
-    // ── 2. BLACKBAR START end-trigger ─────────────────────────────────────────
-    if (current.blackbarFlag > old.blackbarFlag
-        && vars.cpEndTrigger.ContainsKey(current.levelID)
-        && vars.cpEndTrigger[current.levelID] == vars.BLACKBAR_START
-        && vars.blackbarEnterCount == vars.cpEndCount[current.levelID])
+// ── 2. BLACKBAR START end-trigger ─────────────────────────────────────────
+    
+if (current.blackbarFlag > old.blackbarFlag
+    && vars.cpEndTrigger.ContainsKey(current.levelID)
+    && vars.cpEndTrigger[current.levelID] == vars.BLACKBAR_START
+    && vars.blackbarEnterCount == vars.cpEndCount[current.levelID])
+{
+    int delay = vars.cpEndDelay[current.levelID];
+    if (delay == 0)
     {
-        int delay = vars.cpEndDelay[current.levelID];
-        if (delay == 0)
-        {
-            if (ilMode) return true;
-            vars.pauseTimer     = true;
-            vars.waitingToStart = true;
-            vars.pausedAtLevel  = current.levelID;
-            return false;
-        }
-        vars.waitingToSplit = true;
-        vars.pendingDelayMs = delay;
-        vars.delayStartTime = Environment.TickCount;
-        if (!ilMode) { vars.pauseTimer = true; vars.waitingToStart = true; vars.pausedAtLevel = current.levelID; }
+        if (ilMode) return true;
+        vars.pauseTimer     = true;
+        vars.waitingToStart = true;
+        vars.pausedAtLevel  = current.levelID;
         return false;
     }
+    vars.waitingToSplit = true;
+    vars.pendingDelayMs = delay;
+    vars.delayStartTime = Environment.TickCount;
+    if (!ilMode) 
+    { 
+        vars.pauseTimer = true; 
+        vars.waitingToStart = true; 
+        vars.pausedAtLevel = current.levelID; 
+    }
+    return false;
+}
 
     // ── 3. CUTSCENE END end-trigger ───────────────────────────────────────────
     if (current.cutsceneFlag == 0.0 && old.cutsceneFlag != 0.0
@@ -667,7 +694,12 @@ split
         vars.waitingToSplit = true;
         vars.pendingDelayMs = delay;
         vars.delayStartTime = Environment.TickCount;
-        if (!ilMode) { vars.pauseTimer = true; vars.waitingToStart = true; vars.pausedAtLevel = current.levelID; }
+        if (!ilMode) 
+        { 
+            vars.pauseTimer = true; 
+            vars.waitingToStart = true; 
+            vars.pausedAtLevel = current.levelID; 
+        }
         return false;
     }
 
@@ -689,7 +721,12 @@ split
         vars.waitingToSplit = true;
         vars.pendingDelayMs = delay;
         vars.delayStartTime = Environment.TickCount;
-        if (!ilMode) { vars.pauseTimer = true; vars.waitingToStart = true; vars.pausedAtLevel = current.levelID; }
+        if (!ilMode) 
+        { 
+            vars.pauseTimer = true; 
+            vars.waitingToStart = true; 
+            vars.pausedAtLevel = current.levelID; 
+        }
         return false;
     }
 
@@ -750,8 +787,8 @@ split
 
 isLoading
 {
-    if (current.blackscreenLoadFlag == 1) return true;
-    if (current.gameState == 4)           return true;
-    if (!vars.ilMode && vars.pauseTimer)  return true;
+    if (current.blackscreenLoadFlag == 1)           return true;
+    if (current.gameState == 4)                     return true;
+    if (vars.pauseTimer && !settings["presetIL"])   return true;
     return false;
 }
