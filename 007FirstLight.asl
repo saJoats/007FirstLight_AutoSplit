@@ -788,7 +788,7 @@ if (current.blackbarFlag > old.blackbarFlag
 
 isLoading
 {
-    if (current.blackscreenLoadFlag == 1)           return true;
+    if (current.blackscreenLoadFlag != 0)           return true;
     if (current.gameState == 4)                     return true;
     if (vars.pauseTimer && !settings["presetIL"])   return true;
     return false;
