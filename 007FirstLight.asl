@@ -32,7 +32,7 @@ state("007FirstLight", "1.0.6.0")
     int    gameState            : 0x3DD3B1C; //4=loading 6=ingame 
     double levelID              : 0x6398E00;  
     double cutsceneFlag         : 0x3A08DCC; //0000001D00000001  or 6.1537877938487E-313
-    int    blackscreenLoadFlag  : 0x343D260; // 0 or 1
+    int    blackscreenLoadFlag  : 0x62F3230; // 0 or 1  4 Bytes
     int    blackbarFlag         : 0x5DDAF7C; //0 when off, 1 when on
 }
 
