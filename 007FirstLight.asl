@@ -1,5 +1,5 @@
-// 007 First Light - Auto Splitter 2.0.1
-// Created by Joats aka saJoats - 06/15/2026
+// 007 First Light - Auto Splitter 1.1.0.0
+// Created by Joats aka saJoats - 08/06/2026
 // Leave a comment at https://joats.neocities.org/home
 
 
@@ -34,6 +34,14 @@ state("007FirstLight", "1.0.6.0")
     double cutsceneFlag         : 0x3A08DCC; //0000001D00000001  or 6.1537877938487E-313
     int    blackscreenLoadFlag  : 0x62F3230; // 0 or 1  4 Bytes
     int    blackbarFlag         : 0x5DDAF7C; //0 when off, 1 when on
+}
+state("007FirstLight", "1.1.0.0")
+{
+    int    gameState            : 0x3DDAC5C; //4=loading 6=ingame and main menu 3=connecting
+    double levelID              : 0x63AFDC0; //2.25317447884333E132 - Main Menu  in double form for easy comparison H(0x5B696518F15CEB3BUL)
+    double cutsceneFlag         : 0x3A0FF4C; //(DO NOT CHECK SIMPLE VALUES IN CHEAT ENGINE) 0000001D00000001  or 6.1537877938487E-313 (double) =0000000000000000 at main menu 0000001D00000002(fight it out start) 0000001D00000001(M's office start) 0000001D00000002(Use Environment Against Damien Start)0000001D00000001(landing after)
+    int    blackscreenLoadFlag  : 0x630A370; // 0 or 1 (4 Bytes)
+    int    blackbarFlag         : 0x5DF657C; //0 when off, 1 when on (4 Bytes)
 }
 
 init
@@ -85,7 +93,7 @@ startup
     Func<ulong, double> H = hex =>
         BitConverter.ToDouble(BitConverter.GetBytes(hex), 0);
 
-    vars.mainMenuValue = H(0x5B696518F15CEB3BUL);  //2.25317447884333E132 - Main Menu  in double form for easy comparison
+    vars.mainMenuValue = H(0x5B696518F15CEB3BUL); 
 
     vars.NONE           = "None";
     vars.TRANSITION     = "Transition";
@@ -117,10 +125,7 @@ startup
     vars.cpOrder        = new List<double>();
 
     Action<ulong, int, string, string, string, int, int, string, int, int, string> R =
-        (hexID, chapterIndex, cpType, cpVisibility,
-         start, startCount, startDelay,
-         end,   endCount,   endDelay,
-         name) =>
+        (hexID, chapterIndex, cpType, cpVisibility, start, startCount, startDelay, end, endCount, endDelay, name) =>
     {
         double id = H(hexID);
         vars.cpOrder.Add(id);
@@ -258,7 +263,7 @@ startup
 
     // ── Uninvited ─────────────────────────────────────────────────────────────
     R(0x5CB5027D6C9D9A89UL,  0, vars.IL_CHAPTER_TRANSITION, vars.CHECKPOINT_HIDDEN,   vars.NONE, 0, 0, vars.NONE, 0, 0, "M's Office");
-    R(0xB3802674D6A94B61UL, 11, vars.IL_START,              vars.CHECKPOINT_VISIBLE,  vars.CUTSCENE_START, 1, 13000, vars.NONE, 0, 0, "Traffic");
+    R(0xB3802674D6A94B61UL, 11, vars.IL_START,              vars.CHECKPOINT_VISIBLE,  vars.BLACKBAR_END, 1, 0, vars.NONE, 0, 0, "Traffic");
     R(0x7F78B35016E4F11DUL, 11, vars.IL_MIDDLE,             vars.CHECKPOINT_VISIBLE,  vars.NONE, 0, 0, vars.NONE, 0, 0, "Back Home");
     R(0x2F41097777157FCAUL, 11, vars.IL_MIDDLE,             vars.CHECKPOINT_VISIBLE,  vars.NONE, 0, 0, vars.NONE, 0, 0, "Sharpshooter");
     R(0x8FE9D6DEA1E4BB7EUL, 11, vars.IL_MIDDLE,             vars.CHECKPOINT_VISIBLE,  vars.NONE, 0, 0, vars.NONE, 0, 0, "Gala Entrance");
