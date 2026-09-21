@@ -37,11 +37,19 @@ state("007FirstLight", "1.0.6.0")
 }
 state("007FirstLight", "1.1.0.0")
 {
-    int    gameState            : 0x3DDAC5C; //4=loading 6=ingame and main menu 3=connecting
-    double levelID              : 0x63AFDC0; //2.25317447884333E132 - Main Menu  in double form for easy comparison H(0x5B696518F15CEB3BUL)
+    int    gameState            : 0x3DDAC5C; //4=loading 6=ingame and main menu 3=connecting (4 bytes)
+    double levelID              : 0x63AFDC0; //2.25317447884333E132 - Main Menu  in double form for easy comparison H(0x5B696518F15CEB3BUL) = (UL3BEB5CF11865695B)
     double cutsceneFlag         : 0x3A0FF4C; //(DO NOT CHECK SIMPLE VALUES IN CHEAT ENGINE) 0000001D00000001  or 6.1537877938487E-313 (double) =0000000000000000 at main menu 0000001D00000002(fight it out start) 0000001D00000001(M's office start) 0000001D00000002(Use Environment Against Damien Start)0000001D00000001(landing after)
     int    blackscreenLoadFlag  : 0x630A370; // 0 or 1 (4 Bytes)
     int    blackbarFlag         : 0x5DF657C; //0 when off, 1 when on (4 Bytes)
+}
+state("007FirstLight", "1.2.1.0")
+{
+    int    gameState            : 0x3DEEEDC;
+    double levelID              : 0x63C42BF; 
+    double cutsceneFlag         : 0x3A0FF4C; 
+    int    blackscreenLoadFlag  : 0x631E8B0; 
+    int    blackbarFlag         : 0x5E0A8EC; //(could be 5E0A918)
 }
 
 init
