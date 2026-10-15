@@ -51,6 +51,14 @@ state("007FirstLight", "1.2.1.0")
     int    blackscreenLoadFlag  : 0x631E8B0; 
     int    blackbarFlag         : 0x5E0A8EC; //(could be 5E0A918)
 }
+state("007FirstLight", "1.3.1.0")
+{
+    int    gameState            : 0x3E9691C;
+    double levelID              : 0x6453DC0; 
+    double cutsceneFlag         : 0x3ACBE51; 
+    int    blackscreenLoadFlag  : 0x63AE6B0;
+    int    blackbarFlag         : 0x5E9857C;
+}
 
 init
 {
